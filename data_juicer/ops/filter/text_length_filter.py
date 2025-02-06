@@ -1,7 +1,7 @@
 import sys
+from loguru import logger
 
 from data_juicer.utils.constant import Fields, StatsKeys
-
 from ..base_op import OPERATORS, Filter
 
 
@@ -36,24 +36,23 @@ class TextLengthFilter(Filter):
     def compute_stats_batched(self, samples):
         samples_list = samples[self.text_key]
         samples_stats = samples[Fields.stats]
+        logger.debug(f'TextLengthFilter: Processing {len(samples_list)} samples')
         for i, stat in enumerate(samples_stats):
-            # check if it's computed already
-            if StatsKeys.text_len in stat:
-                continue
-            else:
+            if StatsKeys.text_len not in stat:
                 samples_stats[i][StatsKeys.text_len] = len(samples_list[i])
-
         return samples
 
     def process_batched(self, samples):
         if isinstance(samples[Fields.stats], list):
-            return map(
-                lambda stat: self.min_len <= stat[StatsKeys.text_len] <= self.
-                max_len, samples[Fields.stats])
+            results = []
+            for i, stat in enumerate(samples[Fields.stats]):
+                text_len = stat[StatsKeys.text_len]
+                keep = self.min_len <= text_len <= self.max_len
+                logger.info(f'TextLengthFilter: Sample {i} (len={text_len}) {"KEEP" if keep else "FILTER"}')
+                results.append(keep)
+            return results
         else:
-            # single sample for ray filter
-            if self.min_len <= samples[Fields.stats][
-                    StatsKeys.text_len] <= self.max_len:
-                return True
-            else:
-                return False
+            text_len = samples[Fields.stats][StatsKeys.text_len]
+            keep = self.min_len <= text_len <= self.max_len
+            logger.info(f'TextLengthFilter: Single sample (len={text_len}) {"KEEP" if keep else "FILTER"}')
+            return keep
