@@ -44,6 +44,7 @@ from .video_tagging_from_frames_filter import VideoTaggingFromFramesFilter
 from .video_watermark_filter import VideoWatermarkFilter
 from .word_repetition_filter import WordRepetitionFilter
 from .words_num_filter import WordsNumFilter
+from .text_similarity_filter import TextSimilarityFilter
 
 __all__ = [
     'AlphanumericFilter', 'AudioDurationFilter', 'AudioNMFSNRFilter',
@@ -64,6 +65,8 @@ __all__ = [
     'VideoResolutionFilter', 'VideoTaggingFromFramesFilter',
     'VideoWatermarkFilter', 'WordRepetitionFilter', 'WordsNumFilter'
 ]
+
+__all__.append('TextSimilarityFilter')
 
 NON_STATS_FILTERS = [
     'specified_field_filter',

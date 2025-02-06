@@ -208,6 +208,7 @@ class StatsKeysConstant(object):
     stopwords_ratio = 'stopwords_ratio'
     text_len = 'text_len'
     text_pair_similarity = 'text_pair_similarity'
+    text_sim = 'text_sim'
     num_action = 'num_action'
     num_dependency_edges = 'num_dependency_edges'
     num_token = 'num_token'

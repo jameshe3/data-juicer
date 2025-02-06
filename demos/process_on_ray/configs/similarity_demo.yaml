@@ -1,0 +1,16 @@
+project_name: 'similarity-demo'
+dataset_path: './demos/data/demo-dataset.jsonl'
+export_path: './outputs/similarity-demo/processed.jsonl'
+
+executor_type: 'ray'
+ray_address: 'auto'
+
+process:
+  - text_similarity_filter:
+      min_similarity: 0.8
+  - language_id_score_filter:
+      lang: en
+      min_score: 0.8
+  - text_length_filter:
+      min_len: 20
+      max_len: 1000
